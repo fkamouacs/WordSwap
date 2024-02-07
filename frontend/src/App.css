@@ -1,8 +1,8 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 500px;
+  width:500px;
+  padding: 10px;
+  overflow: auto;
 }
 
 .logo {
@@ -39,4 +39,58 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.MuiGrid-item {
+  box-sizing: border-box;
+}
+
+
+.match-info-grid {
+  display: flex;
+  justify-content: space-between; /* Align content to the edges */
+  align-items: center;
+}
+
+.match-info-grid > .MuiGrid-item {
+  display: flex;
+  align-items: center;
+}
+
+.in-game-header-grid {
+  display: flex;
+  justify-content: space-between; /* Align content to the edges */
+  align-items: center;
+}
+
+.in-game-header-grid > .MuiGrid-item {
+  display: flex;
+  align-items: center;
+}
+
+.square{
+  width: 50px;
+  height: 50px;
+  background-color: #ccc; 
+  border: 2px solid #000;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}
+
+.fade-out {
+  opacity: 1;
+  transition: opacity 250ms linear 2s; /* Adjust the duration and timing function as needed */
+}
+
+.fade-out.hidden {
+  opacity: 0;
+}
+
+#chat-box{
+  position:absolute;
+  left: 10px;
+  bottom: 10px;
 }
