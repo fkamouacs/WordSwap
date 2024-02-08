@@ -13,6 +13,17 @@ const playerSchema = new mongoose.Schema({
     gamesWon: {
         type: Number,
         default: 0
+    },
+    inGame:{
+        type: Boolean,
+        default: false
+    },
+    socketId: {
+        type: String,
+        require: true
+    },
+    gameSessionId: {
+        type: String
     }
 });
 

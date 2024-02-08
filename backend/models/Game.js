@@ -3,30 +3,36 @@
 const mongoose = require("mongoose");
 
 const gameSchema = new mongoose.Schema({
-  players: [
-    {
+  user1: {
+    player: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Player",
+      require: true,
     },
-  ],
-  chosenWords: [
-    {
-      player: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Player",
-      },
-      word: String,
+    wordChoice: {
+      type: String,
       required: true,
     },
-  ],
-
+  },
+  user2: {
+    player: {
+      type: mongoose.Schema.Types.ObjectId,
+      require: true,
+    },
+    wordChoice: {
+      type: String,
+      required: true,
+    },
+  },
   guesses: [
     {
       player: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Player",
       },
-      guess: String,
+      guess: {
+        type: String,
+        require: true,
+      },
       timestamp: {
         type: Date,
         default: Date.now,
