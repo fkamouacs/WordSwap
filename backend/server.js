@@ -1,5 +1,5 @@
 // Import necessary modules
-const { startOrJoinGame } = require("./controller/gameController"); // Import the function
+const { startOrJoinGame, getAllGames } = require("./controller/gameController"); // Import the function
 const express = require("express"); // Importing Express framework
 const http = require("http"); // Required for creating HTTP server
 const socketIo = require("socket.io"); // Importing Socket.IO
@@ -19,7 +19,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO and attach it to the HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:1313",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -43,7 +43,7 @@ app.use("/api/games", gameRoutes); // Use game routes for requests to '/api/game
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/wordGuessDueIDB", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -172,6 +172,10 @@ io.on("connection", (socket) => {
 
   socket.on("update-my-choice-of-word", (input) => {
     console.log(input + " from " + socket.id);
+  });
+
+  socket.on("init games", () => {
+    getAllGames(socket);
   });
 });
 
