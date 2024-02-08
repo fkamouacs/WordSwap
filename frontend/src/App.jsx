@@ -1,17 +1,19 @@
-import React from "react";
-// import GameComponent from "./components/GameComponent"; // Import the game component
-import InGamePage from "./components/in_game_page";
+
+import { useState } from "react";
 import "./App.css";
+import InGamePage from "./components/in_game_page";
+import StatsScreen from "./components/StatsScreen"; // Testing purposes
 
 function App() {
+  const [count, setCount] = useState(0);
+
   return (
     <>
-    <InGamePage/>
+      <InGamePage />
+      <StatsScreen />
     </>
-      //   <div className="App">
-      //   <GameComponent />
-      // </div>
-  )
+
+  );
 }
 
 export default App;
