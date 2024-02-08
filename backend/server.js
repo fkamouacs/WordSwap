@@ -87,29 +87,54 @@ app.get("/", async (req, res) => {
 // Array to keep track of waiting players
 let waitingPlayers = [];
 
-// async function makeGame(player1, word1, player2, word2){
-//     try{const newGame = new Game({
-//             user1 : {
-//                 player : player1,
-//                 wordChoice: word1
-//             },
-//             user2 : {
-//                 player : player2,
-//                 wordChoice: word2
-//             },
-//             guesses : [],
-//             status : 'in-progress',
-//             startTime : Date.now
-//         })
+async function addStep(gameId, playerId, action){
+  /* action = [type] | messsage
+      type one of "guess", "pick-word", "interupt", "end", "start"
+      if player guess then action = "guess|house"
+      if player pick the word then action = "pick-word|house"
+      if game start then action = "start|[some message]"
+      if the game end then action = "end|[some message]"
+      if the game got interupted by server issue then action = "interupt|[some message]"
+  */
 
-//         const saveGame = await newGame.save();
-//         console.log("New game instance created : ",saveGame)
-//         return saveGame;
-//     } catch (error){
-//         console.log("Error when creating a new game : ",error)
-//         throw error;
-//     }
-// }
+    const game = await gameRoutes.find({_id:gameId})
+
+    if (!game) {
+      throw new Error('Game not found');
+    }
+
+    const newStep = {
+      player : playerId,
+      action : action
+    }
+
+    game.steps.push(newStep);
+
+    await game.save();
+
+}
+
+async function makeGame(player1, word1, player2, word2){
+    try{const newGame = new Game({
+            user1 : {
+                player : player1,
+                wordChoice: word1
+            },
+            user2 : {
+                player : player2,
+                wordChoice: word2
+            },
+            steps : [],
+        })
+
+        const saveGame = await newGame.save();
+        console.log("New game instance created : ",saveGame)
+        return saveGame;
+    } catch (error){
+        console.log("Error when creating a new game : ",error)
+        throw error;
+    }
+}
 
 // Socket.IO connection event
 io.on("connection", (socket) => {

@@ -23,14 +23,15 @@ const gameSchema = new mongoose.Schema({
       required: true,
     },
   },
-  guesses: [
+  steps: [
     {
       player: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Player",
       },
-      guess: {
+      action: {
         type: String,
+        enum: ["guess", "pick-word", "interupt", "end", "start"],
         require: true,
       },
       timestamp: {
@@ -39,17 +40,6 @@ const gameSchema = new mongoose.Schema({
       },
     },
   ],
-  status: {
-    type: String,
-    enum: ["in-progress", "completed", "abandoned"],
-    default: "in-progress",
-  },
-  winner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Player",
-  },
-  startTime: Date,
-  endTime: Date,
 });
 
 module.exports = mongoose.model("Game", gameSchema);
