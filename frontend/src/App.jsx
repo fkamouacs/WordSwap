@@ -1,32 +1,17 @@
-<<<<<<< HEAD
-import { useState } from 'react'
-import './App.css'
-import InGamePage from './components/in_game_page'
-
+import React from "react";
+// import GameComponent from "./components/GameComponent"; // Import the game component
+import InGamePage from "./components/in_game_page";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-
-
-
-
   return (
     <>
     <InGamePage/>
     </>
+      //   <div className="App">
+      //   <GameComponent />
+      // </div>
   )
-=======
-import React from "react";
-import GameComponent from "./components/GameComponent"; // Import the game component
-
-function App() {
-  return (
-    <div className="App">
-      <GameComponent />
-    </div>
-  );
->>>>>>> 1268b9dd18fb403019495b8fdca0677fffa2df25
 }
 
 export default App;

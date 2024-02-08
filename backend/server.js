@@ -44,6 +44,30 @@ mongoose.connect("mongodb://localhost:27017/wordGuessDueIDB", { useNewUrlParser:
 // Array to keep track of waiting players
 let waitingPlayers = [];
 
+// async function makeGame(player1, word1, player2, word2){
+//     try{const newGame = new Game({
+//             user1 : {
+//                 player : player1,
+//                 wordChoice: word1
+//             },
+//             user2 : {
+//                 player : player2,
+//                 wordChoice: word2
+//             },
+//             guesses : [],
+//             status : 'in-progress',
+//             startTime : Date.now
+//         })
+
+//         const saveGame = await newGame.save();
+//         console.log("New game instance created : ",saveGame)
+//         return saveGame;
+//     } catch (error){
+//         console.log("Error when creating a new game : ",error)
+//         throw error;
+//     }
+// }
+
 // Socket.IO connection event
 io.on('connection', (socket) => {
     console.log('New client connected at : ' + socket.id);

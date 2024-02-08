@@ -1,5 +1,5 @@
-import { useState } from "react"import InGamePage from "./in_game_page";
-}
+import { useState } from "react"
+import InGamePage from "./in_game_page";
 
 export default function PageDirectory(){
 
