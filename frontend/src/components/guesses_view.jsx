@@ -7,7 +7,7 @@ export default function GuessView({guessWithResult}){
     
     return(
         <>
-        <Box>
+        <Box width={"500px"} height={"300px"}>
             <List>
                 <Grid container key={"guess-" + count} justifyContent={"center"}>
                     <Grid item key={"guess-word-" + count} xs={3} padding={padding} textAlign={"right"}>

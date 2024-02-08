@@ -9,17 +9,20 @@ import GuessInputBox from './guess_input_box'
 import InGamgeHeader from './in_game_header'
 import LetterDisplay from './letters_display'
 import InGameAlert from './in_game_alert'
+import SurrenderModal from './surrenderConfirmModal'
+import GameResultModal from './game_result_modal'
 
-const socket = io("http://localhost:5000");
-
-export default function InGamePage(){
+export default function InGamePage({socket}){
 
     const [messages, setMessages] = useState([]) 
     const [opponentId, setOpponentId] = useState("user2")
-    const [onChatBox, setOnChatBox] = useState(false)
+    const [onInput, setOnInput] = useState(true)
     const [wordChosen, setWordChosen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
     const [guessWithResult, setGuessWithResult] = useState([])
+    const [openSurrenderConfirmation, setOpenSurrenderConfirmation] = useState(false)
+    const [openGameResultModal, setOpenGameResultModal] = useState(false)
+    
     const alerts = {
         askForWord : "Please input a word for the opponent to guess upon",
         wordNotExist : "The word you've inputted is not in the word list",
@@ -89,14 +92,35 @@ export default function InGamePage(){
         }else if(!wordChosen){
             // handle pick word
             console.log("chosed the word : " + input)
-            socket.emit("update-my-choice-of-word", inpu)
+            socket.emit("update-my-choice-of-word", input)
+            setWordChosen(true)
         }else{
             socket.emit("input-a-guess", input)
         }
     }
+
+    function openSurrenderModal(){
+        setOpenSurrenderConfirmation(true)
+    }
+
+    function closeSurrenderModal(){
+        setOpenSurrenderConfirmation(false)
+    }
+
+    function exitGame(){
+        closeSurrenderModal()
+        console.log("exit from a game")
+    }
+
     
     return(
         <>
+        <GameResultModal/>
+        <SurrenderModal
+            closeSurrenderModal={closeSurrenderModal}
+            exitGame={exitGame}
+            openSurrenderConfirmation={openSurrenderConfirmation}
+        />
         <InGameAlert
         alertMessage={alertMessage}
         show={show}
@@ -105,15 +129,18 @@ export default function InGamePage(){
             messages={messages}
             setMessages={setMessages}
             sendMessage={sendMessage}
-            setOnChatBox={setOnChatBox}
+            setOnInput={setOnInput}
         />
-        <InGamgeHeader/>
+        <InGamgeHeader
+            openSurrenderModal={openSurrenderModal}
+        />
         <GuessView
             guessWithResult={guessWithResult}
         />
         <GuessInputBox
             sendGuess={sendGuess}
-            onChatBox={onChatBox}
+            onInput={onInput}
+            setOnInput={setOnInput}
         />
         {/* <LetterDisplay/> */}
         </>

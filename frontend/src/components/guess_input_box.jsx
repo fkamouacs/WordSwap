@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Grid, Box, Button } from "@mui/material";
+import {Textarea} from '@mui/joy'
 
 
-export default function GuessInputBox({sendGuess,onChatBox}){
+export default function GuessInputBox({sendGuess,onInput,setOnInput}){
 
     const [input, setInput] = useState([])
 
     useEffect(() => {
         const handleKeyDown = (event) => {
 
-          if(onChatBox){
-            console.log("on chat box")
+          if(!onInput){
             return
           }else if (event.key.match(/^[a-zA-Z]$/) && input.length < 5) {
             setInput(prevInput => [...prevInput, event.key])
@@ -28,11 +28,13 @@ export default function GuessInputBox({sendGuess,onChatBox}){
         return () => {
           document.removeEventListener('keydown', handleKeyDown);
         };
-      }, [input,onChatBox]);
+      }, [input,onInput]);
+
+
 
     return(<>
     <Grid container justifyContent={"center"}>
-        <Grid item xs={10}>
+        <Grid item xs={10} paddingTop={1} paddingBottom={2}>
            <Grid container justifyContent={"center"}>
                 <Grid item key={"input-letter-1"} xs={2} padding={1}>
                 <div className="square">
@@ -61,10 +63,25 @@ export default function GuessInputBox({sendGuess,onChatBox}){
                 </Grid>
             </Grid> 
         </Grid>
-        <Grid item xs={2}>
-            <Button onClick={() => sendGuess(input.join(""))}>Send</Button>
-        </Grid>
-        
+    </Grid>
+    <Grid container justifyContent={"center"}>
+      <Button 
+        className='send-input-button' 
+        onClick={() => sendGuess(input.join(""))}
+      >Send</Button>
+      <Textarea 
+          style={{
+              backgroundColor: '#2a2a2a',
+              border: '2px solid #4c4c4c',
+              borderRadius: '5px',
+              width: '500px',
+              height: '300px',
+              color: '#ffffff',
+            }}
+          onBlur={() => setOnInput(true)}
+          onFocus={() => setOnInput(false)}
+          placeholder='Use me to your advantage!'
+      />
     </Grid>
     </>)
 }

@@ -1,53 +1,45 @@
 // models/Game.js
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const gameSchema = new mongoose.Schema({
-    user1: {
-        player : {
-            type: mongoose.Schema.Types.ObjectId,
-            require: true
-        },
-        wordChoice: {
-            type: String,
-            required: true
-        }
+  user1: {
+    player: {
+      type: mongoose.Schema.Types.ObjectId,
+      require: true,
     },
-    user2: {
-        player : {
-            type: mongoose.Schema.Types.ObjectId,
-            require: true
-        },
-        wordChoice: {
-            type: String,
-            required: true
-        }
+    wordChoice: {
+      type: String,
+      required: true,
     },
-    guesses: [{
-        player: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Player'
-        },
-        guess: {
-            type: String,
-            require: true
-        },
-        timestamp: {
-            type: Date,
-            default: Date.now
-        }
-    }],
-    status: {
-        type: String,
-        enum: ['in-progress', 'completed', 'abandoned'],
-        default: 'in-progress'
+  },
+  user2: {
+    player: {
+      type: mongoose.Schema.Types.ObjectId,
+      require: true,
     },
-    winner: {
+    wordChoice: {
+      type: String,
+      required: true,
+    },
+  },
+  steps: [
+    {
+      player: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Player'
+        ref: "Player",
+      },
+      action: {
+        type: String,
+        enum: ["guess", "pick-word", "interupt", "end", "start"],
+        require: true,
+      },
+      timestamp: {
+        type: Date,
+        default: Date.now,
+      },
     },
-    startTime: Date,
-    endTime: Date
+  ],
 });
 
-module.exports = mongoose.model('Game', gameSchema);
+module.exports = mongoose.model("Game", gameSchema);

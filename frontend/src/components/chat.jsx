@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 
-export default function ChatBox({messages, setMessages,sendMessage,setOnChatBox}){
+export default function ChatBox({messages, setMessages,sendMessage,setOnInput}){
 
     const [inputText, setInputText] = useState('');
 
@@ -15,12 +15,6 @@ export default function ChatBox({messages, setMessages,sendMessage,setOnChatBox}
             sendMessage(new_message)
             setMessages(messages)
         }
-    }
-    function handleBlur(){
-        setOnChatBox(false)
-    }
-    function handleFocus(){
-        setOnChatBox(true)
     }
 
     function handleKeyDown(event){
@@ -48,8 +42,8 @@ export default function ChatBox({messages, setMessages,sendMessage,setOnChatBox}
                 variant='outlined'
                 value={inputText}
                 onChange={(e)=>setInputText(e.target.value)}
-                onBlur={handleBlur}
-                onFocus={handleFocus}
+                onBlur={() => setOnInput(true)}
+                onFocus={() => setOnInput(false)}
                 onKeyDown={handleKeyDown}
             />
             <Button 
