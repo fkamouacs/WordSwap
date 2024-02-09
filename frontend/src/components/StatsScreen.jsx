@@ -4,7 +4,7 @@ import StatsTable from "./StatsTable";
 
 import axios from "axios"
 
-const StatsScreen = () => {
+const StatsScreen = (props) => {
   // Track what game list to show
   const [isAllGames, setIsAllGames] = useState(true);
   const [games, setGames] = useState([]);
@@ -35,9 +35,7 @@ useEffect(() => {
 },[games])
 
 
-useEffect(() => {
-    console.log(usernames)
-},[usernames])
+
 
   useEffect(() => {
     // Setup listener for 'game starting' event from server
@@ -45,21 +43,26 @@ useEffect(() => {
     socket.emit("init games");
 
     socket.on("init games", (games) => {
-      console.log(games);
+    
       setGames(games);
 
       
     });
 
+    socket.on("update games", (games) => {
+      setGames(games);
+    })
+
     // Cleanup listener on component unmount
     return () => {
       socket.off("init games");
+    
     };
   }, [socket]);
 
   const displayTable = () => {
     if (isAllGames) {
-      return <StatsTable games={games} usernames={usernames} />;
+      return <StatsTable games={games} usernames={usernames} user={"65c520577862ca9c209aa60d"}/>;
     }
     
    const lastHour = getGamesLastHour();
@@ -73,9 +76,7 @@ useEffect(() => {
       let difference = currDate.getTime() - date.getTime();
       let hoursMilli = 1000 * 60 * 60;
   
-      console.log(date)
-      console.log("curr" + currDate)
-      console.log(difference < hoursMilli)
+      
      return Math.abs(difference) < hoursMilli
     })
     return lastHour;
