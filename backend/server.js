@@ -266,6 +266,7 @@ io.on("connection", (socket) => {
 
   // Handle Socket.IO events here
 
+
   // Leaving a room
   socket.on("leave game", async (fromUserName) => {
     const gameId = (Array.from(socket.rooms).filter(room => room != socket.id))[0]
@@ -383,18 +384,9 @@ io.on("connection", (socket) => {
     );
   });
 
-  // Listen for chat messages
-  socket.on("send chat message", (data) => {
-    // 'data' contains details of the message and the game
-    // Broadcast message to the other player in the same game
-    io.emit("receive chat message", data);
-    // console.log("received" + data.message);
-    // console.log("gameId" + data.gameId);
-  });
 
   socket.emit("connected", "You've connected to the server");
 
-  socket.emit("in-game-server-message", "in game message");
 
   socket.on("disconnect", () => {
     // console.log("Client disconnected");
@@ -406,15 +398,6 @@ io.on("connection", (socket) => {
     socket.leave(gameId);
   });
 
-
-  // // Listen for chat messages
-  // socket.on("send chat message", (data) => {
-  //   // 'data' contains details of the message and the game
-  //   // Broadcast message to the other player in the same game
-  //   io.to(data.gameId).emit("receive chat message", data);
-
-  //   // Optionally, save the message to the database
-  // });
 
   socket.on("send-message", async (message,fromUserName) => {
     const gameId = (Array.from(socket.rooms).filter(room => room != socket.id))[0]
@@ -445,6 +428,26 @@ io.on("connection", (socket) => {
     }else if(result == 6){
       socket.emit("guess result", guess, 6)
       io.to(gameId).emit("game finished", fromUserName)
+
+      // handle the back end win/losses
+
+      const player1 = await Player.findById({_id:game.user1.player})
+      const player2 = await Player.findById({_id:game.user2.player})
+
+      if(player1.username == fromUserName){
+        //handle lost for player 1
+        await handleLose(player1._id)
+        await handleWin(player2._id)
+        game.winner = player2._id;
+      }else{
+        //handle lost for player 2
+        await handleLose(player2._id)
+        await handleWin(player1._id)
+        game.winner = player1._id;
+      }
+      game.ended = true;
+      await game.save()
+
     }else{
       socket.emit("guess result", guess, result)
       io.to(gameId).emit("change turn")
@@ -452,19 +455,16 @@ io.on("connection", (socket) => {
     
   });
 
-  socket.on("update-my-choice-of-word", (input) => {
-    console.log(input + " from " + socket.id);
-  });
 
-  socket.on("init games", async () => {
-    const all = await Game.find({});
-    io.emit("init games", all);
-  });
+  // socket.on("init games", async () => {
+  //   const all = await Game.find({});
+  //   io.emit("init games", all);
+  // });
 
-  socket.on("update games", async () => {
-    const all = await Game.find({});
-    io.emit("update games", all);
-  })
+  // socket.on("update games", async () => {
+  //   const all = await Game.find({});
+  //   io.emit("update games", all);
+  // })
 });
 
 // Function to start game with countdown
