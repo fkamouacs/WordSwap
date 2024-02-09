@@ -7,8 +7,6 @@ const cors = require("cors"); // Importing CORS to allow cross-origin requests
 require("dotenv").config(); // Importing and configuring dotenv to load environment variables
 const Player = require("./models/Player"); // Import the Player model
 const Game = require("./models/Game"); // Import Game model
-const cookieParser = require("cookie-parser");
-const uuid = require("uuid");
 
 // Initialize express app
 const app = express(); // Creating an instance of Express
@@ -50,39 +48,6 @@ mongoose
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
 
-// Function to generate a unique player name
-const generateRandomName = () => {
-  const spiceAdjectives = [
-    "Cinnamon",
-    "Cardamom",
-    "Clove",
-    "Ginger",
-    "Saffron",
-    "Nutmeg",
-  ];
-  const herbNouns = ["Basil", "Rosemary", "Thyme", "Sage", "Mint", "Coriander"];
-  const spiceAdjective =
-    spiceAdjectives[Math.floor(Math.random() * spiceAdjectives.length)];
-  const herbNoun = herbNouns[Math.floor(Math.random() * herbNouns.length)];
-  return `${spiceAdjective}${herbNoun}`;
-};
-
-app.get("/", async (req, res) => {
-  let playerName = req.cookies.playerName;
-
-  if (!playerName) {
-    playerName = generateRandomName();
-    res.cookie("playerName", playerName, { maxAge: 900000, httpOnly: true });
-
-    // Create a new Player using the Player model
-    await Player.create({
-      username: playerName,
-      socketId: uuid.v4(), // Use uuid for generating socketId
-    });
-  }
-
-  res.json({ playerName });
-});
 
 // Array to keep track of waiting players
 let waitingPlayers = [];
