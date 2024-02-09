@@ -11,7 +11,7 @@ import InGameAlert from './in_game_alert'
 import SurrenderModal from './surrenderConfirmModal'
 import GameResultModal from './game_result_modal'
 
-export default function InGamePage({socket,gameRoom,setGameRoom,playerName,opponentName,setHomePage}){
+export default function InGamePage({socket,playerName,opponentName,setHomePage}){
 
     const [messages, setMessages] = useState([]) 
     const [onInput, setOnInput] = useState(true)

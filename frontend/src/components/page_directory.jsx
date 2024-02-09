@@ -89,8 +89,6 @@ export default function PageDirectory(){
             return(<>
             <InGamePage 
                 socket={socket}
-                gameRoom={gameRoom}
-                setGameRoom={setGameRoom}
                 setPage={setPage}
                 playerName={playerName}
                 opponentName={opponentName}
