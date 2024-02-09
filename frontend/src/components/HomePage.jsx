@@ -16,6 +16,7 @@ function HomePage(){
     }, []);
 
     const handleFindGame = () => {
+        
         console.log("Find Game Button Clicked");
     };
     const handleViewStats = () => {

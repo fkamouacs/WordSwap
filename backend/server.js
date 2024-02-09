@@ -1,14 +1,15 @@
 // Import necessary modules
-const { startOrJoinGame, getAllGames } = require("./controller/gameController"); // Import the function
 const express = require("express"); // Importing Express framework
 const http = require("http"); // Required for creating HTTP server
 const socketIo = require("socket.io"); // Importing Socket.IO
 const mongoose = require("mongoose"); // Importing Mongoose for MongoDB interactions
 const cors = require("cors"); // Importing CORS to allow cross-origin requests
 require("dotenv").config(); // Importing and configuring dotenv to load environment variables
+
 const Player = require("./models/player"); // Import the Player model
 const Game = require("./models/game"); // Import the Player model
 const Word = require("./models/word")
+
 const cookieParser = require("cookie-parser");
 const uuid = require("uuid");
 const fs = require('fs');
@@ -257,6 +258,8 @@ async function handleWin(playerId){
   await player.save()
 }
 
+
+
 // Socket.IO connection event
 io.on("connection", (socket) => {
   // console.log("New client connected at : " + socket.id);
@@ -280,18 +283,20 @@ io.on("connection", (socket) => {
       //handle lost for player 1
       await handleLose(player1._id)
       await handleWin(player2._id)
+      game.winner = player2._id;
     }else{
       //handle lost for player 2
       await handleLose(player2._id)
       await handleWin(player1._id)
+      game.winner = player1._id;
     }
-
     game.ended = true;
     await game.save()
 
   });
 
   // Player wants to find a game
+
   socket.on("find game", async (username) => {
     if(waitingPlayers.includes(username)){
       return
@@ -329,6 +334,7 @@ io.on("connection", (socket) => {
       io.to(player2.socketId).emit("opponent info",player1.username)
 
       startGame(io,game._id); // Start game with countdown
+
     }
   });
 
@@ -394,10 +400,6 @@ io.on("connection", (socket) => {
     // console.log("Client disconnected");
   });
 
-  // Joining a room
-  socket.on("join-game", (gameId) => {
-    socket.join(gameId);
-  });
 
   // Leaving a room
   socket.on("leave game", (gameId) => {
@@ -454,9 +456,15 @@ io.on("connection", (socket) => {
     console.log(input + " from " + socket.id);
   });
 
-  socket.on("init games", () => {
-    getAllGames(socket);
+  socket.on("init games", async () => {
+    const all = await Game.find({});
+    io.emit("init games", all);
   });
+
+  socket.on("update games", async () => {
+    const all = await Game.find({});
+    io.emit("update games", all);
+  })
 });
 
 // Function to start game with countdown

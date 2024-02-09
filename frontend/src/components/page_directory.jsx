@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react"
-import { useSocket } from "../../socket-api/SocketContext.jsx";
 import InGamePage from "./in_game_page";
-import GameComponent from './GameComponent.jsx'
+
 import { Button, TextField } from "@mui/material";
 
 import axios from 'axios';
 import io from 'socket.io-client';
 
+import { useSocket } from "../../SocketContext";
+import WaitingRoom from "./waitingRoom";
+import StatsScreen from "./StatsScreen"
+import HomePage from './HomePage'
 
 export default function PageDirectory(){
 
@@ -18,7 +21,7 @@ export default function PageDirectory(){
         VIEW_STAT : "VIEW STAT"
     }
 
-    const [PAGE, setPage] = useState(PAGE_MODE.IN_GAME)
+    const [PAGE, setPage] = useState(PAGE_MODE.HOME)
     const [gameRoom, setGameRoom] = useState(""); // for in game
     const [playerName, setPlayerName] = useState('');
     const [opponentName, setOpponentName] = useState('');
@@ -48,6 +51,7 @@ export default function PageDirectory(){
     })
 
 
+
     // useEffect(() => {
     //     console.log(playerName)
     //     socket.on("game created successfully", async (gameId) => {
@@ -75,10 +79,11 @@ export default function PageDirectory(){
 
     switch (PAGE){
         case PAGE_MODE.HOME:
-            return(<></>)
+            return(<><HomePage/></>)
         case PAGE_MODE.WAITING_ROOM:
             return(<>
-            <GameComponent/>
+            <TextField onChange={(event) => {setPlayerName(event.target.value)}}></TextField>
+            <WaitingRoom/>
             </>)
         case PAGE_MODE.IN_GAME:
             return(<>
@@ -93,7 +98,7 @@ export default function PageDirectory(){
             />
             </>)
         case PAGE_MODE.VIEW_STAT:
-            return(<></>)
+            return(<><StatsScreen/></>)
         default:
             return(<>
             {/* <TextField onChange={(event) => {setPlayerName(event.target.value)}}></TextField> */}

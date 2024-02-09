@@ -42,7 +42,12 @@ const gameSchema = new mongoose.Schema({
   },timestamp: {
     type: Date,
     default: Date.now,
+  },winner: {
+    type: mongoose.Schema.Types.ObjectId,
+        ref: "Player",
   },
+
+  endTime: Date
 });
 
 module.exports = mongoose.model("game", gameSchema);

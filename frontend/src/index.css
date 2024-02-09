@@ -69,3 +69,15 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.highlight {
+  background-color: rgb(196, 188, 206);
+}
+
+.sortTable {
+  cursor: pointer;
+}
+
+.sortTable:hover {
+  background-color: gainsboro;
+}
