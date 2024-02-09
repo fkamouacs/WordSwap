@@ -223,6 +223,11 @@ io.on("connection", (socket) => {
     const all = await Game.find({});
     io.emit("init games", all);
   });
+
+  socket.on("update games", async () => {
+    const all = await Game.find({});
+    io.emit("update games", all);
+  })
 });
 
 // Function to start game with countdown
