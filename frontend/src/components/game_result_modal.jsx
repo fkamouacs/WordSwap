@@ -1,13 +1,13 @@
 import {Button, Dialog, DialogTitle, Grid} from '@mui/material';
 import BackHandIcon from '@mui/icons-material/BackHand';
 
-export default function GameResultModal({}){
+export default function GameResultModal({winner,openGameResultModal,toggleOpenGameResultModal}){
     return(<>
-    <Dialog open={false}>
+    <Dialog open={winner !="" && openGameResultModal}>
         <DialogTitle>
-            Game Result
+            Winner is {winner}
         </DialogTitle>
-        <Grid container>
+        {/* <Grid container>
             <Grid item>
                 Guesses made : 10
                 <br/>
@@ -18,13 +18,10 @@ export default function GameResultModal({}){
                 <br/>
                 Letters used : 20
             </Grid>
-        </Grid>
-        <Grid container>
+        </Grid> */}
+        <Grid container justifyContent={"center"}>
             <Grid item>
-                <Button>Go Back</Button>
-            </Grid>
-            <Grid item>
-                <Button>Home</Button>
+                <Button onClick={toggleOpenGameResultModal}>Go Back</Button>
             </Grid>
         </Grid>
     </Dialog>

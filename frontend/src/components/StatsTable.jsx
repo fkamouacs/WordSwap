@@ -30,7 +30,10 @@ const StatsTable = (props) => {
   },[props.games])
 
  const getNumGuesses = (game) => {
-  
+    const winnerSteps = game.steps.filter((step) => step.player == game.winner)
+    const winnerGuesses = winnerSteps.filter(step => step.action.substring(0,4) == "guess")
+    
+    return winnerGuesses.length
  }
 
  useEffect(() => {

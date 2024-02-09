@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { SocketProvider } from "../SocketContext.jsx";
 
+
 // Render the React application
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
