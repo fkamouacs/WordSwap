@@ -20,11 +20,12 @@ const playerSchema = new mongoose.Schema({
     },
     socketId: {
         type: String,
-        require: true
+        default: ""
     },
     gameSessionId: {
-        type: String
+        type: String,
+        default: ""
     }
 });
 
-module.exports = mongoose.model('Player', playerSchema);
+module.exports = mongoose.model('player', playerSchema);

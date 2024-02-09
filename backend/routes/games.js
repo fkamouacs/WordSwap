@@ -1,7 +1,7 @@
 // routes/games.js
 
 const express = require('express');
-const Game = require('../models/Game');
+const Game = require('../models/game');
 const router = express.Router();
 
 // Start a new game

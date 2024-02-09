@@ -3,17 +3,14 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 
-export default function ChatBox({messages, setMessages,sendMessage,setOnInput}){
+export default function ChatBox({messages,sendMessage,setOnInput}){
 
     const [inputText, setInputText] = useState('');
 
     function handleSendButton(){
         if(inputText.length > 0){
-            const new_message = {user:"user1",message:inputText}
             setInputText('')
-            messages.push(new_message)
-            sendMessage(new_message)
-            setMessages(messages)
+            sendMessage(inputText)
         }
     }
 
@@ -32,7 +29,7 @@ export default function ChatBox({messages, setMessages,sendMessage,setOnInput}){
                 index++;
                 return(
                     <Box key={"message-" + index} id="chat-box-message">
-                        {message.user} : {message.message}
+                        {message}
                     </Box>
                 )
             })}
@@ -45,10 +42,26 @@ export default function ChatBox({messages, setMessages,sendMessage,setOnInput}){
                 onBlur={() => setOnInput(true)}
                 onFocus={() => setOnInput(false)}
                 onKeyDown={handleKeyDown}
+                style={{
+                    backgroundColor: '#ffffff',
+                    border: '2px solid #4c4c4c',
+                    borderRadius: '5px',
+                    color: '#ffffff',
+                    overflow:"auto",
+                  }}
             />
             <Button 
                 id="chat-box-input-send-button"
                 onClick={handleSendButton}
+                style={{
+                    backgroundColor: '#012328', 
+                    border: "2px solid #ffffff",
+                    fontSize: '1rem',
+                    margin: "5px",
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    textTransform: 'none',
+                }}
                 >Send</Button>
         </Box>
         </>

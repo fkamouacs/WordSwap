@@ -1,25 +1,33 @@
 import { useState, useEffect } from 'react'
 import { Grid, Box, Button } from "@mui/material";
 import {Textarea} from '@mui/joy'
+import LetterDisplay from './letter_display'
 
 
-export default function GuessInputBox({sendGuess,onInput,setOnInput}){
+export default function GuessInputBox({sendGuess,onInput,setOnInput,isMyTurn,winner,toggleOpenGameResultModal}){
 
     const [input, setInput] = useState([])
+
+    function handleSendInput(){
+      const stringToInput = input.join("");
+      const result = sendGuess(stringToInput);
+      if(result == 0){
+        setInput(() => [])
+      }
+    }
 
     useEffect(() => {
         const handleKeyDown = (event) => {
 
           if(!onInput){
-            return
+            return -1
           }else if (event.key.match(/^[a-zA-Z]$/) && input.length < 5) {
             setInput(prevInput => [...prevInput, event.key])
           }
           else if(event.key == "Backspace"){
             setInput(prevInput => prevInput.slice(0,-1))
-          }else if(event.key == "Enter"){
-            const stringToInput = input.join("");
-            sendGuess(stringToInput);
+          }else if(event.key == "Enter" && input.length != 0 && isMyTurn && winner == ""){
+            handleSendInput()
           }
         };
     
@@ -67,15 +75,17 @@ export default function GuessInputBox({sendGuess,onInput,setOnInput}){
     <Grid container justifyContent={"center"}>
       <Button 
         className='send-input-button' 
-        onClick={() => sendGuess(input.join(""))}
-      >Send</Button>
+        onClick={(winner == "") ? handleSendInput : toggleOpenGameResultModal}
+        disabled={!isMyTurn && winner == ""}
+      >{(winner=="") ? ((isMyTurn) ? "Send" : "Wait For Opponent") : "View Result"}</Button>
+      <LetterDisplay/>
       <Textarea 
           style={{
               backgroundColor: '#2a2a2a',
               border: '2px solid #4c4c4c',
               borderRadius: '5px',
               width: '500px',
-              height: '300px',
+              height: '200px',
               color: '#ffffff',
             }}
           onBlur={() => setOnInput(true)}

@@ -1,5 +1,5 @@
-const Game = require("../models/Game"); // Import your Game model
-const Player = require("../models/Player"); // Import your Player model
+const Game = require("../models/game"); // Import your Game model
+const Player = require("../models/player"); // Import your Player model
 
 // This is a very simplified version of the function
 async function startOrJoinGame(playerId, gameId) {

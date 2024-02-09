@@ -85,14 +85,17 @@
 }
 
 #chat-box{
-  position:absolute;
+  position:fixed;
   left: 10px;
   bottom: 10px;
+  z-index: 800;
+  min-width: 400px;
 }
 
 
+
 .send-input-button.MuiButton-root{
-  background-color: #05292e;
+  background-color: #012328;
   border: 2px solid #ffffff;
   font-size: x-large;
   margin-bottom: 20px;

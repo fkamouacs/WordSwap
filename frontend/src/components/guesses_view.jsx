@@ -8,16 +8,16 @@ export default function GuessView({guessWithResult}){
     return(
         <>
         <Box width={"500px"} height={"300px"}>
-            <List>
-                <Grid container key={"guess-" + count} justifyContent={"center"}>
-                    <Grid item key={"guess-word-" + count} xs={3} padding={padding} textAlign={"right"}>
-                        Your Guesses
-                    </Grid>
-                    <Grid item key={"guess-result-" + count} xs={3} padding={padding} textAlign={"left"}>
-                        Letters Correct
-                    </Grid>
+            <Grid container key={"guess-" + count} justifyContent={"center"}>
+                <Grid item key={"guess-word-" + count} xs={3} padding={padding} textAlign={"right"}>
+                    Your Guesses
                 </Grid>
-                {guessWithResult.map((guess) => {
+                <Grid item key={"guess-result-" + count} xs={3} padding={padding} textAlign={"left"}>
+                    Letters Correct
+                </Grid>
+            </Grid>
+            <List sx={{ maxHeight: "250px", overflowY: 'auto' }}>
+                {[...guessWithResult].reverse().map((guess) => {
                     count++;
                     return(
                         <Grid container key={"guess-" + count}  justifyContent={"center"}>
@@ -25,7 +25,7 @@ export default function GuessView({guessWithResult}){
                                 {guess.guess}
                             </Grid>
                             <Grid item key={"guess-result-" + count} xs={3} padding={padding} textAlign={"left"}>
-                                {guess.correct_letters}
+                                {(guess.correct_letters) == 6 ? "You got it!" : guess.correct_letters}
                             </Grid>
                         </Grid>
                     )

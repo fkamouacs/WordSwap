@@ -3,6 +3,8 @@
   line-height: 1.5;
   font-weight: 400;
 
+  min-width: 500px;
+
   color-scheme: light dark;
   color: rgb(233, 233, 233);
   background-color: #141414;

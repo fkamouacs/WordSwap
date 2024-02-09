@@ -6,21 +6,17 @@ const gameSchema = new mongoose.Schema({
   user1: {
     player: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
     },
     wordChoice: {
       type: String,
-      required: true,
     },
   },
   user2: {
     player: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
     },
     wordChoice: {
       type: String,
-      required: true,
     },
   },
   steps: [
@@ -40,6 +36,13 @@ const gameSchema = new mongoose.Schema({
       },
     },
   ],
+  ended:{
+    type: Boolean,
+    default: false
+  },timestamp: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model("Game", gameSchema);
+module.exports = mongoose.model("game", gameSchema);

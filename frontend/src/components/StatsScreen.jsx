@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { useSocket } from "../SocketContext";
+import { useSocket } from "../../socket-api/SocketContext.jsx";
 
 const StatsScreen = () => {
   // Track what game list to show
