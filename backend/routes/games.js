@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 // Make a guess in a game
 router.post('/:gameId/guess', async (req, res) => {
     // ... implementation for making a guess
-    
+
 });
 
 // Get game status

@@ -43,7 +43,9 @@ const gameSchema = new mongoose.Schema({
   winner: {
     type: mongoose.Schema.Types.ObjectId,
         ref: "Player",
-  }
+  },
+
+  endTime: Date
 });
 
 module.exports = mongoose.model("Game", gameSchema);

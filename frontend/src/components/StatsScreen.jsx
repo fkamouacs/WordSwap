@@ -61,7 +61,27 @@ useEffect(() => {
     if (isAllGames) {
       return <StatsTable games={games} usernames={usernames} />;
     }
+    
+   const lastHour = getGamesLastHour();
+   return <StatsTable games={lastHour} usernames={usernames}/>
   };
+
+  const getGamesLastHour = () => {
+    const lastHour = games.filter((game) => {
+      let currDate = new Date();
+      let date = new Date(game.endTime);
+      let difference = currDate.getTime() - date.getTime();
+      let hoursMilli = 1000 * 60 * 60;
+  
+      console.log(date)
+      console.log("curr" + currDate)
+      console.log(difference < hoursMilli)
+     return Math.abs(difference) < hoursMilli
+    })
+    return lastHour;
+  
+  }
+
 
   return (
     <div className="stats-screen">
