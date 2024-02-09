@@ -2,7 +2,7 @@ import { useState } from "react"
 import InGamePage from "./in_game_page";
 import { useSocket } from "../../SocketContext";
 import WaitingRoom from "./waitingRoom";
-
+import StatsScreen from "./StatsScreen"
 export default function PageDirectory(){
 
 
@@ -13,7 +13,7 @@ export default function PageDirectory(){
         VIEW_STAT : "VIEW STAT"
     }
 
-    const [PAGE, setPage] = useState(PAGE_MODE.WAITING_ROOM);
+    const [PAGE, setPage] = useState(PAGE_MODE.VIEW_STAT);
     const [gameRoom, setGameRoom] = useState(""); // for in game
     
     const socket = useSocket();
@@ -28,7 +28,7 @@ export default function PageDirectory(){
         case PAGE_MODE.IN_GAME:
             return(<><InGamePage/></>)
         case PAGE_MODE.VIEW_STAT:
-            return(<></>)
+            return(<><StatsScreen/></>)
         default:
             return(<></>)
     }

@@ -6,6 +6,7 @@ const mongoose = require("mongoose"); // Importing Mongoose for MongoDB interact
 const cors = require("cors"); // Importing CORS to allow cross-origin requests
 require("dotenv").config(); // Importing and configuring dotenv to load environment variables
 const Player = require("./models/Player"); // Import the Player model
+const Game = require("./models/Game"); // Import Game model
 const cookieParser = require("cookie-parser");
 const uuid = require("uuid");
 
@@ -26,7 +27,7 @@ const io = socketIo(server, {
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow only the frontend origin to access the server
+    origin: "*", // Allow only the frontend origin to access the server
     methods: ["GET", "POST"], // Adjust methods as per your requirements
   })
 );
@@ -218,8 +219,9 @@ io.on("connection", (socket) => {
     console.log(input + " from " + socket.id);
   });
 
-  socket.on("init games", () => {
-    getAllGames(socket);
+  socket.on("init games", async () => {
+    const all = await Game.find({});
+    io.emit("init games", all);
   });
 });
 
