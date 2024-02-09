@@ -1,5 +1,4 @@
 // Import necessary modules
-const { startOrJoinGame, getAllGames } = require("./controller/gameController"); // Import the function
 const express = require("express"); // Importing Express framework
 const http = require("http"); // Required for creating HTTP server
 const socketIo = require("socket.io"); // Importing Socket.IO
@@ -135,17 +134,14 @@ async function makeGame(player1, word1, player2, word2){
         throw error;
     }
 }
+function createNewGameId(){
 
+}
 // Socket.IO connection event
 io.on("connection", (socket) => {
   console.log("New client connected at : " + socket.id);
 
   // Handle Socket.IO events here
-
-  // Joining a room
-  socket.on("start or join game", ({ playerId, gameId }) => {
-    startOrJoinGame(playerId, gameId); // Call the function
-  });
 
   // Leaving a room
   socket.on("leave game", (gameId) => {
@@ -154,10 +150,13 @@ io.on("connection", (socket) => {
 
   // Player wants to find a game
   socket.on("find game", () => {
+    console.log(socket.id);
+    console.log(waitingPlayers);
     waitingPlayers.push(socket.id);
-
+    console.log(waitingPlayers);
     if (waitingPlayers.length >= 2) {
-      const gameId = createNewGameId(); // Create a unique game ID
+      const gameId = (waitingPlayers[waitingPlayers.length - 2]) + (waitingPlayers[waitingPlayers.length - 1]); // Create a unique game ID
+      console.log(gameId);
       waitingPlayers.forEach((playerSocketId) => {
         io.to(playerSocketId).join(gameId);
       });
@@ -190,10 +189,6 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 
-  // Joining a room
-  socket.on("join-game", (gameId) => {
-    socket.join(gameId);
-  });
 
   // Leaving a room
   socket.on("leave game", (gameId) => {

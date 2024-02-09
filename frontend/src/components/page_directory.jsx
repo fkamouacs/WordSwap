@@ -1,5 +1,7 @@
 import { useState } from "react"
 import InGamePage from "./in_game_page";
+import { useSocket } from "../../SocketContext";
+import WaitingRoom from "./waitingRoom";
 
 export default function PageDirectory(){
 
@@ -11,21 +13,21 @@ export default function PageDirectory(){
         VIEW_STAT : "VIEW STAT"
     }
 
-    const [PAGE, setPage] = useState(PAGE_MODE.HOME);
+    const [PAGE, setPage] = useState(PAGE_MODE.WAITING_ROOM);
     const [gameRoom, setGameRoom] = useState(""); // for in game
-
-    const socket = io('http://localhost:5000');
+    
+    const socket = useSocket();
 
 
 
     switch (PAGE){
-        case PAGE.HOME:
+        case PAGE_MODE.HOME:
             return(<></>)
-        case PAGE.WAITING_ROOM:
-            return(<></>)
-        case PAGE.IN_GAME:
+        case PAGE_MODE.WAITING_ROOM:
+            return(<><WaitingRoom/></>)
+        case PAGE_MODE.IN_GAME:
             return(<><InGamePage/></>)
-        case PAGE.VIEW_STAT:
+        case PAGE_MODE.VIEW_STAT:
             return(<></>)
         default:
             return(<></>)
