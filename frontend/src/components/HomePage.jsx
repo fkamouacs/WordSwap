@@ -8,25 +8,32 @@ function HomePage({playerName,setPlayerName,find_game,setStatPage,stop_find_game
 
     const [openWaitModal, setOpenWaitModal] = useState(false)
 
-    if(document.cookie.includes("PlayerName")) {
-        setPlayerName(document.cookie.split("=")[1]);
-        console.log(playerName + " was found in cookies");
-    }
-    else {
-        useEffect(() => {
-            // Fetch player name from the server
-            axios.post('http://localhost:5000/api/players/')
-              .then((response) => {
+    useEffect(() => {
+        // Check if the playerName is already in cookies
+        if (document.cookie.includes("PlayerName")) {
+            console.log(document.cookie)
+            const nameFromCookie = document.cookie.split("PlayerName=")[1];
+            if (nameFromCookie) {
+                setPlayerName(nameFromCookie);
+                console.log(nameFromCookie + " was found in cookies");
+                return;
+            }
+        }
+
+        // If not in cookies, fetch player name from the server
+        async function getPlayerName() {
+            try {
+                const response = await axios.post('http://localhost:5000/api/players/');
                 setPlayerName(response.data.playerName);
-              })
-              .catch((error) => {
+                document.cookie = "PlayerName=" + response.data.playerName;
+                console.log("no player name cookie found");
+                console.log(response.data.playerName);
+            } catch (error) {
                 console.error('Error fetching player name:', error);
-              });
-        }, []);
-        console.log("no player name cookie found");
-        console.log(playerName);
-        document.cookie = "PlayerName=" + playerName;
-    }
+            }
+        }
+        getPlayerName();
+    }, []);
 
     const handleFindGame = () => {
         setOpenWaitModal(true)

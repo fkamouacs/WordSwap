@@ -29,6 +29,9 @@ const gameSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
         ref: "Player",
   },
+  guesses:{
+    type: Number
+  },
 
   endTime: Date
 });

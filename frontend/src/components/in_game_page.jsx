@@ -157,7 +157,7 @@ export default function InGamePage({socket,playerName,opponentName,setHomePage})
                 setIsMyTurn(false)
             })
         }else{
-            socket.emit("input-a-guess", input, playerName)
+            socket.emit("input-a-guess", input, playerName, guessWithResult.length)
             socket.on("guess result", (guess,result)=>{
                 console.log("guess result", guess, result)
                 const newGuess = {

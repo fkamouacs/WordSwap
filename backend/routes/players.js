@@ -14,7 +14,9 @@ router.post('/', async (req, res) => {
         const spiceAdjective =
         spiceAdjectives[Math.floor(Math.random() * spiceAdjectives.length)];
         const herbNoun = herbNouns[Math.floor(Math.random() * herbNouns.length)];
-        return `${spiceAdjective}${herbNoun}`;
+        const max = 100;
+        const min = 1;
+        return `${spiceAdjective}${herbNoun}${Math.floor(Math.random() * (max - min + 1))}`;
     };
 
     playerName = generateRandomName();

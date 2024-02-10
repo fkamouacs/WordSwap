@@ -15,20 +15,6 @@ const uuid = require("uuid");
 const fs = require('fs');
 const readline = require('readline');
 
-async function clearDatabase() {
-  try {
-      await Player.deleteMany({});
-      console.log("All players deleted.");
-
-      await Game.deleteMany({});
-      console.log("All games deleted.");
-
-  } catch (error) {
-      console.error("Error clearing database:", error);
-  }
-}
-clearDatabase();
-
 async function addWordsFromFile(filePath) {
   
   await Word.deleteMany({});
@@ -82,6 +68,27 @@ app.use("/api/players", playerRoutes); // Use player routes for requests to '/ap
 app.use("/api/games", gameRoutes); // Use game routes for requests to '/api/games'
 
 
+// // Function to generate a unique player name
+// const generateRandomName = () => {
+//   const spiceAdjectives = [
+//     "Cinnamon",
+//     "Cardamom",
+//     "Clove",
+//     "Ginger",
+//     "Saffron",
+//     "Nutmeg",
+//   ];
+
+//   const max = 100;
+//   const min = 1;
+
+//   const herbNouns = ["Basil", "Rosemary", "Thyme", "Sage", "Mint", "Coriander"];
+//   const spiceAdjective =
+//     spiceAdjectives[Math.floor(Math.random() * spiceAdjectives.length)];
+//   const herbNoun = herbNouns[Math.floor(Math.random() * herbNouns.length)];
+//   return `${spiceAdjective}${Math.floor(Math.random() * (max - min + 1))}${herbNoun}`;
+// };
+// console.log("new name : ",generateRandomName())
 
 // Connect to MongoDB
 mongoose
@@ -92,40 +99,22 @@ mongoose
   .then(() => {console.log("MongoDB successfully connected");addWordsFromFile("validWords.txt")})
   .catch((err) => console.log(err));
 
-// Function to generate a unique player name
-const generateRandomName = () => {
-  const spiceAdjectives = [
-    "Cinnamon",
-    "Cardamom",
-    "Clove",
-    "Ginger",
-    "Saffron",
-    "Nutmeg",
-  ];
 
-  const max = 100;
-  const min = 1;
+// app.get("/players", async (req, res) => {
 
-  const herbNouns = ["Basil", "Rosemary", "Thyme", "Sage", "Mint", "Coriander"];
-  const spiceAdjective =
-    spiceAdjectives[Math.floor(Math.random() * spiceAdjectives.length)];
-  const herbNoun = herbNouns[Math.floor(Math.random() * herbNouns.length)];
-  return `${spiceAdjective}${herbNoun}${Math.floor(Math.random() * (max - min + 1))}`;
-};
+//     const playerName = generateRandomName();
+//     console.log(playerName)
+//     res.cookie("playerName", playerName, { maxAge: 900000, httpOnly: true });
 
-app.get("/", async (req, res) => {
+//     // Create a new Player using the Player model
+//     console.log(playerName)
+//     await Player.create({
+//       username: playerName,
+//       socketId: uuid.v4(), // Use uuid for generating socketId
+//     });
 
-    playerName = generateRandomName();
-    // res.cookie("playerName", playerName, { maxAge: 900000, httpOnly: true });
-
-    // Create a new Player using the Player model
-    await Player.create({
-      username: playerName,
-      socketId: uuid.v4(), // Use uuid for generating socketId
-    });
-
-  res.json({ playerName });
-});
+//   res.json({ playerName });
+// });
 
 // Array to keep track of waiting players
 let waitingPlayers = [];
@@ -296,6 +285,7 @@ io.on("connection", (socket) => {
       await handleWin(player1._id)
       game.winner = player1._id;
     }
+    game.guesses = -1
     game.ended = true;
     await game.save()
 
@@ -406,7 +396,7 @@ io.on("connection", (socket) => {
     io.emit("receive-message", `${fromUserName} : ${message}`);
   });
 
-  socket.on("input-a-guess", async (guess, fromUserName) => {
+  socket.on("input-a-guess", async (guess, fromUserName, guess_n) => {
     console.log(fromUserName, " took a guess ", guess);
     const gameId = (Array.from(socket.rooms).filter(room => room != socket.id))[0]
     const game = await Game.findById({_id:gameId})
@@ -447,6 +437,7 @@ io.on("connection", (socket) => {
         game.winner = player1._id;
       }
       game.ended = true;
+      game.guesses = guess_n
       await game.save()
 
       socket.broadcast.emit("init games");

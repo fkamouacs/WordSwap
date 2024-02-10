@@ -3,6 +3,8 @@
   width:500px;
   padding: 10px;
   overflow: visible;
+  /* display: flex; */
+  justify-content: center;
 }
 
 .logo {

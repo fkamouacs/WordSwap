@@ -29,12 +29,12 @@ const StatsTable = (props) => {
     setSortedGames(props.games)
   },[props.games])
 
- const getNumGuesses = (game) => {
-    const winnerSteps = game.steps.filter((step) => step.player == game.winner)
-    const winnerGuesses = winnerSteps.filter(step => step.action.substring(0,4) == "guess")
+//  const getNumGuesses = (game) => {
+//     const winnerSteps = game.guesses
+//     const winnerGuesses = winnerSteps.filter(step => step.action.substring(0,4) == "guess")
     
-    return winnerGuesses.length
- }
+//     return winnerSteps
+//  }
 
  useEffect(() => {
   if (sort == "winner a" || sort == "winner d") {
@@ -132,14 +132,14 @@ const StatsTable = (props) => {
       <Table size="small" aria-label="stats table">
         <TableHead>
           <TableRow>
-            <TableCell>Game ID</TableCell>
+            {/* <TableCell>Game ID</TableCell> */}
             <TableCell align="right">Player 1</TableCell>
             <TableCell align="right">Player 2</TableCell>
             <TableCell align="right">Player 1 Word Choice</TableCell>
             <TableCell align="right">Player 2 Word Choice</TableCell>
             <TableCell align="right" className="sortTable" onClick={()=>{setSort(()=> ascend? "winner a" : "winner d")}}>{ `Winner ${ascend? "↑" : "↓"}`}</TableCell>
             <TableCell align="right" className="sortTable">Guesses to Win</TableCell>
-            <TableCell align="right" className="sortTable" onClick={() =>{setSort(()=>ascend? "time a": "time d")}}>{`End Time ${ascend? "↑" : "↓"}`}</TableCell>
+            {/* <TableCell align="right" className="sortTable" onClick={() =>{setSort(()=>ascend? "time a": "time d")}}>{`End Time ${ascend? "↑" : "↓"}`}</TableCell> */}
           </TableRow>
         </TableHead>
         
@@ -152,16 +152,16 @@ const StatsTable = (props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
           
-              <TableCell component="th" scope="row">
+              {/* <TableCell component="th" scope="row">
                 {row._id}
-              </TableCell>
+              </TableCell> */}
               <TableCell align="right">{props.usernames[row.user1.player]}</TableCell>
               <TableCell align="right">{props.usernames[row.user2.player]}</TableCell>
               <TableCell align="right">{row.user1.wordChoice}</TableCell>
               <TableCell align="right">{row.user2.wordChoice}</TableCell>
               <TableCell align="right">{props.usernames[row.winner]}</TableCell>
-              <TableCell align="right">{getNumGuesses(row)}</TableCell>
-              <TableCell align="right">{convertDate(row.endTime)}</TableCell>
+              <TableCell align="right">{(row.guesses < 1) ? "Player Left" : row.guesses}</TableCell>
+              {/* <TableCell align="right">{convertDate(row.endTime)}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>
