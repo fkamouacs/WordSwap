@@ -23,8 +23,13 @@ function HomePage(){
               });
         }, []);
         console.log("no player name cookie found");
-        console.log(playerName);
-        document.cookie = "PlayerName=" + playerName;
+        // Set player name in cookies
+        const addcookie = "PlayerName=" + playerName;
+        console.log(addcookie + " " + addcookie.length + " " + playerName.length);
+        if(playerName.length > 0){
+            console.log(playerName)
+        }
+        //document.cookie = "PlayerName=" + playerName;
     }
 
     const handleFindGame = () => {

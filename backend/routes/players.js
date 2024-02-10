@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Create a new player
 router.post('/', async (req, res) => {
+    console.log("posting player api started");
     // Function to generate a unique player name
     const generateRandomName = () => {
         const spiceAdjectives = ["Cinnamon", "Cardamom", "Clove", "Ginger", "Saffron", "Nutmeg",];
