@@ -35,6 +35,7 @@ function HomePage({playerName,setPlayerName,find_game,setStatPage,stop_find_game
         getPlayerName();
     }, []);
 
+
     const handleFindGame = () => {
         setOpenWaitModal(true)
         find_game()
