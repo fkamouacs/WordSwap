@@ -31,20 +31,6 @@ export default function PageDirectory(){
 
     const [socket] = useState(io('http://localhost:5000'))
 
-    async function handleButton(){
-        await axios.get('http://localhost:5000/')
-          .then((response) => {
-            console.log(response.data.playerName)
-            setPlayerName(response.data.playerName);
-
-            socket.emit("find game", response.data.playerName)
-
-          })
-          .catch((error) => {
-            console.error('Error fetching player name:', error);
-          });
-        // socket.emit("find game")
-    }
 
     socket.on("game starting", (countdown) => {
         console.log(countdown)
@@ -52,14 +38,7 @@ export default function PageDirectory(){
 
 
 
-    // useEffect(() => {
-    //     console.log(playerName)
-    //     socket.on("game created successfully", async (gameId) => {
-    //         setGameRoom(gameId);
-    //         console.log(playerName)
-    //         socket.emit("set word", "mouse", playerName)
-    //     })
-    // }, [playerName]);
+
 
     socket.on("game created successfully", async (gameId) => {
         setGameRoom(gameId);
@@ -77,9 +56,29 @@ export default function PageDirectory(){
         setPage(PAGE_MODE.HOME)
     }
 
+    function find_game(){
+        socket.emit("find game", playerName)
+    }
+
+    function stop_find_game(){
+        socket.emit("stop find game", playerName)
+    }
+
+    function setStatPage(){
+        setPage(PAGE_MODE.VIEW_STAT)
+    }
+
     switch (PAGE){
         case PAGE_MODE.HOME:
-            return(<><HomePage/></>)
+            return(<>
+                <HomePage
+                playerName={playerName}
+                setPlayerName={setPlayerName}
+                find_game={find_game}
+                setStatPage={setStatPage}
+                stop_find_game={stop_find_game}
+                />
+            </>)
         case PAGE_MODE.WAITING_ROOM:
             return(<>
             <TextField onChange={(event) => {setPlayerName(event.target.value)}}></TextField>
@@ -89,7 +88,6 @@ export default function PageDirectory(){
             return(<>
             <InGamePage 
                 socket={socket}
-                setPage={setPage}
                 playerName={playerName}
                 opponentName={opponentName}
                 setHomePage={setHomePage}

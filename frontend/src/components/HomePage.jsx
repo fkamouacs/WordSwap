@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import WaitingModal from "./waiting_modal";
 
-function HomePage(){
-    const [playerName, setPlayerName] = useState('');
+function HomePage({playerName,setPlayerName,find_game,setStatPage,stop_find_game}){
+
+
+    const [openWaitModal, setOpenWaitModal] = useState(false)
+
 
     useEffect(() => {
         // Fetch player name from the server
@@ -16,19 +20,32 @@ function HomePage(){
     }, []);
 
     const handleFindGame = () => {
-        
-        console.log("Find Game Button Clicked");
+        setOpenWaitModal(true)
+        find_game()
     };
     const handleViewStats = () => {
-        console.log("View Stats Button Clicked");
+        setStatPage()
     };
 
-    return(
+    const handleCancelButton = () => {
+        setOpenWaitModal(false)
+        stop_find_game()
+    }
+
+    return(<>
+        <WaitingModal
+            stop_find_game={stop_find_game}
+            handleCancelButton={handleCancelButton}
+            openWaitModal={openWaitModal}
+        />
         <div>
             <h1>Welcome to Word Swap, {playerName}!</h1>
             <button onClick={handleFindGame}>Find Game</button>
             <button onClick={handleViewStats}>View Stats</button>
         </div>
+        
+        </>
+        
     );
 }
 

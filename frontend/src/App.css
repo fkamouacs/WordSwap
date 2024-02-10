@@ -2,7 +2,7 @@
   max-width: 500px;
   width:500px;
   padding: 10px;
-  overflow: auto;
+  overflow: visible;
 }
 
 .logo {

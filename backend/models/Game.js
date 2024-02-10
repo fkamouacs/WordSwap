@@ -19,23 +19,6 @@ const gameSchema = new mongoose.Schema({
       type: String,
     },
   },
-  steps: [
-    {
-      player: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Player",
-      },
-      action: {
-        type: String,
-        enum: ["guess", "pick-word", "interupt", "end", "start"],
-        require: true,
-      },
-      timestamp: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
   ended:{
     type: Boolean,
     default: false

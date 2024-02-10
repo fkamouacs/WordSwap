@@ -43,15 +43,8 @@ useEffect(() => {
     socket.emit("init games");
 
     socket.on("init games", (games) => {
-    
       setGames(games);
-
-      
     });
-
-    socket.on("update games", (games) => {
-      setGames(games);
-    })
 
     // Cleanup listener on component unmount
     return () => {
