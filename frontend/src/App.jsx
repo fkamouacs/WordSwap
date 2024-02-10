@@ -1,12 +1,12 @@
 import React from "react";
 import PageDirectory from "./components/page_directory";
-import HomePage from "./components/HomePage";
+import "./App.css"
 
 
 function App() {
   return (
     <div className="App">
-      <HomePage />
+      <PageDirectory />
     </div>
   );
 }

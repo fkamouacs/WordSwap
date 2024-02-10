@@ -102,11 +102,15 @@ const generateRandomName = () => {
     "Saffron",
     "Nutmeg",
   ];
+
+  const max = 100;
+  const min = 1;
+
   const herbNouns = ["Basil", "Rosemary", "Thyme", "Sage", "Mint", "Coriander"];
   const spiceAdjective =
     spiceAdjectives[Math.floor(Math.random() * spiceAdjectives.length)];
   const herbNoun = herbNouns[Math.floor(Math.random() * herbNouns.length)];
-  return `${spiceAdjective}${herbNoun}`;
+  return `${spiceAdjective}${herbNoun}${Math.floor(Math.random() * (max - min + 1))}`;
 };
 
 app.get("/", async (req, res) => {
@@ -277,6 +281,7 @@ io.on("connection", (socket) => {
     io.to(gameId).emit("player left", fromUserName)
 
     if(game.ended){
+      socket.leave(gameId);
       return 
     }
 
@@ -294,10 +299,16 @@ io.on("connection", (socket) => {
     game.ended = true;
     await game.save()
 
+    socket.broadcast.emit("init games");
+    socket.leave(gameId);
+
   });
 
-  // Player wants to find a game
+  socket.on("stop find game", (username)=>{
+    waitingPlayers = waitingPlayers.filter(item=> item != username)
+  })
 
+  // Player wants to find a game
   socket.on("find game", async (username) => {
     if(waitingPlayers.includes(username)){
       return
@@ -388,16 +399,6 @@ io.on("connection", (socket) => {
   socket.emit("connected", "You've connected to the server");
 
 
-  socket.on("disconnect", () => {
-    // console.log("Client disconnected");
-  });
-
-
-  // Leaving a room
-  socket.on("leave game", (gameId) => {
-    socket.leave(gameId);
-  });
-
 
   socket.on("send-message", async (message,fromUserName) => {
     const gameId = (Array.from(socket.rooms).filter(room => room != socket.id))[0]
@@ -448,6 +449,9 @@ io.on("connection", (socket) => {
       game.ended = true;
       await game.save()
 
+      socket.broadcast.emit("init games");
+      socket.leave(gameId);
+
     }else{
       socket.emit("guess result", guess, result)
       io.to(gameId).emit("change turn")
@@ -456,15 +460,11 @@ io.on("connection", (socket) => {
   });
 
 
-  // socket.on("init games", async () => {
-  //   const all = await Game.find({});
-  //   io.emit("init games", all);
-  // });
+  socket.on("init games", async () => {
+    const all = await Game.find({});
+    io.emit("init games", all);
+  });
 
-  // socket.on("update games", async () => {
-  //   const all = await Game.find({});
-  //   io.emit("update games", all);
-  // })
 });
 
 // Function to start game with countdown

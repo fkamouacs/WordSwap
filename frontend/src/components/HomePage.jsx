@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSocket } from '../../SocketContext';
 import axios from 'axios';
+import WaitingModal from "./waiting_modal";
 
-function HomePage(){
-    const [playerName, setPlayerName] = useState('');
-    // Retrieve socket instance from context
-    const socket = useSocket();
+function HomePage({playerName,setPlayerName,find_game,setStatPage,stop_find_game}){
+
+
+    const [openWaitModal, setOpenWaitModal] = useState(false)
 
     if(document.cookie.includes("PlayerName")) {
         setPlayerName(document.cookie.split("=")[1]);
@@ -33,19 +34,32 @@ function HomePage(){
     }
 
     const handleFindGame = () => {
-        
-        console.log("Find Game Button Clicked");
+        setOpenWaitModal(true)
+        find_game()
     };
     const handleViewStats = () => {
-        console.log("View Stats Button Clicked");
+        setStatPage()
     };
 
-    return(
+    const handleCancelButton = () => {
+        setOpenWaitModal(false)
+        stop_find_game()
+    }
+
+    return(<>
+        <WaitingModal
+            stop_find_game={stop_find_game}
+            handleCancelButton={handleCancelButton}
+            openWaitModal={openWaitModal}
+        />
         <div>
             <h1>Welcome to Word Swap, {playerName}!</h1>
             <button onClick={handleFindGame}>Find Game</button>
             <button onClick={handleViewStats}>View Stats</button>
         </div>
+        
+        </>
+        
     );
 }
 
