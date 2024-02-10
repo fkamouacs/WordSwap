@@ -76,10 +76,14 @@ useEffect(() => {
   
   }
 
+  const handleHome = () => {
+    props.setPage("HOME")
+  }
 
   return (
     <div className="stats-screen">
       <h1>Stats Screen</h1>
+      <button onClick={()=> handleHome()}>Back to Home</button>
       <div>
         <button onClick={() => setIsAllGames(true)}>All Games</button>
         <button onClick={() => setIsAllGames(false)}>Recent Games</button>

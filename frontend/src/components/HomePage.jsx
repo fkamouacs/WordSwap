@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSocket } from '../../SocketContext';
 import axios from 'axios';
 import WaitingModal from "./waiting_modal";
 
@@ -7,17 +8,25 @@ function HomePage({playerName,setPlayerName,find_game,setStatPage,stop_find_game
 
     const [openWaitModal, setOpenWaitModal] = useState(false)
 
-
-    useEffect(() => {
-        // Fetch player name from the server
-        axios.get('http://localhost:5000/')
-          .then((response) => {
-            setPlayerName(response.data.playerName);
-          })
-          .catch((error) => {
-            console.error('Error fetching player name:', error);
-          });
-    }, []);
+    if(document.cookie.includes("PlayerName")) {
+        setPlayerName(document.cookie.split("=")[1]);
+        console.log(playerName + " was found in cookies");
+    }
+    else {
+        useEffect(() => {
+            // Fetch player name from the server
+            axios.post('http://localhost:5000/api/players/')
+              .then((response) => {
+                setPlayerName(response.data.playerName);
+              })
+              .catch((error) => {
+                console.error('Error fetching player name:', error);
+              });
+        }, []);
+        console.log("no player name cookie found");
+        console.log(playerName);
+        document.cookie = "PlayerName=" + playerName;
+    }
 
     const handleFindGame = () => {
         setOpenWaitModal(true)
