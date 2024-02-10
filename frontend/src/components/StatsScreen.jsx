@@ -84,7 +84,7 @@ useEffect(() => {
   }
 
   const handleHome = () => {
-    props.setPage("VIEW STAT")
+    props.setPage("HOME")
   }
 
   return (
