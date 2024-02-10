@@ -96,7 +96,7 @@ export default function PageDirectory(){
             />
             </>)
         case PAGE_MODE.VIEW_STAT:
-            return(<><StatsScreen/></>)
+            return(<><StatsScreen setPage={setPage}/></>)
         default:
             return(<>
             {/* <TextField onChange={(event) => {setPlayerName(event.target.value)}}></TextField> */}
