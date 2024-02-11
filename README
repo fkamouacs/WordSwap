@@ -1,7 +1,7 @@
 Create 3 terminals, one on file WordSwap, one on frontend and one on back end
 
 On the WordSwap terminal run "mongod"
-On the frontend terminal run "npm start"
-On the backend terminal run "nodemon server.js"
+On the frontend terminal run "npm install" and then "npm start"
+On the backend terminal run "npm install" and then "nodemon server.js"
 
 The simply open web browsers on "http://localhost:1313".
